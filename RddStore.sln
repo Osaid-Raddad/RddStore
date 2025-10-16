@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36518.9 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RddStore.PL", "RddStore.PL\RddStore.PL.csproj", "{7E796401-C2CA-4A9B-81FC-352575D1C579}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RddStore.BLL", "RddStore.BLL\RddStore.BLL.csproj", "{1667F4D5-E1AE-407A-BB8B-548A83BC6518}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RddStore.DAL", "RddStore.DAL\RddStore.DAL.csproj", "{C63AC59E-815B-4492-B9EC-D876762DE42F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{7E796401-C2CA-4A9B-81FC-352575D1C579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E796401-C2CA-4A9B-81FC-352575D1C579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E796401-C2CA-4A9B-81FC-352575D1C579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1667F4D5-E1AE-407A-BB8B-548A83BC6518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1667F4D5-E1AE-407A-BB8B-548A83BC6518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1667F4D5-E1AE-407A-BB8B-548A83BC6518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1667F4D5-E1AE-407A-BB8B-548A83BC6518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63AC59E-815B-4492-B9EC-D876762DE42F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63AC59E-815B-4492-B9EC-D876762DE42F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63AC59E-815B-4492-B9EC-D876762DE42F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63AC59E-815B-4492-B9EC-D876762DE42F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
