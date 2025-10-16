@@ -1,4 +1,9 @@
 
+using Microsoft.EntityFrameworkCore;
+using RddStore.BLL.Services;
+using RddStore.DAL.Data;
+using RddStore.DAL.Repositories;
+
 namespace RddStore.PL
 {
     public class Program
@@ -12,6 +17,12 @@ namespace RddStore.PL
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             var app = builder.Build();
 
