@@ -9,25 +9,25 @@ namespace RddStore.PL.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
+        private readonly ICategoryService _icategoryService;
 
-        public CategoriesController(ICategoryService categoryService )
+        public CategoriesController(ICategoryService icategoryService )
         {
-            this.categoryService = categoryService;
+            _icategoryService = icategoryService;
         }
 
 
-        [HttpGet("")]
+        [HttpGet("GetAll")]
         public IActionResult GetAllCategories()
         {
-            return Ok(categoryService.GetAllCategories());
+            return Ok(_icategoryService.GetAllCategories());
         }
 
 
-        [HttpGet ("{id}")]
+        [HttpGet ("Get/{id}")]
         public IActionResult GetCategoryById(int id)
         {
-            var category = categoryService.GetCategoryById(id);
+            var category = _icategoryService.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -38,32 +38,32 @@ namespace RddStore.PL.Controllers
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CategoryRequest request)
         {
-            var id = categoryService.CreateCategory(request);
+            var id = _icategoryService.CreateCategory(request);
           
             return CreatedAtAction(nameof(GetCategoryById), new { id });
         }
 
 
-        [HttpPatch ("{id}")]
+        [HttpPatch ("Update/{id}")]
         public IActionResult UpdateCategory(int id, [FromBody] CategoryRequest request)
         {
-            var updated = categoryService.UpdateCategory(id, request);
+            var updated = _icategoryService.UpdateCategory(id, request);
             return  updated > 0 ? Ok() : NotFound();
         }
 
         [HttpPatch("ToogleStatus/{id}")]
         public IActionResult ToggleStatus(int id)
         {
-            var updated = categoryService.ToogleStatus(id);
+            var updated = _icategoryService.ToogleStatus(id);
             return updated  ? Ok( new {message = "Status Toggled"}) : NotFound(new {message="Category not found"});
         }
 
 
 
-        [HttpDelete]
+        [HttpDelete ("Delete")]
         public IActionResult DeleteCategory(int id)
         {
-           var deleted = categoryService.DeleteCategory(id);
+           var deleted = _icategoryService.DeleteCategory(id);
             return deleted > 0 ? Ok() : NotFound();
         }
 
