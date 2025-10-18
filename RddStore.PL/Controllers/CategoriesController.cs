@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RddStore.BLL.Services;
+using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.DTO.Requests;
 
 namespace RddStore.PL.Controllers
@@ -20,14 +20,14 @@ namespace RddStore.PL.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAllCategories()
         {
-            return Ok(_icategoryService.GetAllCategories());
+            return Ok(_icategoryService.GetAll());
         }
 
 
         [HttpGet ("Get/{id}")]
         public IActionResult GetCategoryById(int id)
         {
-            var category = _icategoryService.GetCategoryById(id);
+            var category = _icategoryService.GetById(id);
             if (category == null)
             {
                 return NotFound();
@@ -38,7 +38,7 @@ namespace RddStore.PL.Controllers
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CategoryRequest request)
         {
-            var id = _icategoryService.CreateCategory(request);
+            var id = _icategoryService.Create(request);
           
             return CreatedAtAction(nameof(GetCategoryById), new { id });
         }
@@ -47,7 +47,7 @@ namespace RddStore.PL.Controllers
         [HttpPatch ("Update/{id}")]
         public IActionResult UpdateCategory(int id, [FromBody] CategoryRequest request)
         {
-            var updated = _icategoryService.UpdateCategory(id, request);
+            var updated = _icategoryService.Update(id, request);
             return  updated > 0 ? Ok() : NotFound();
         }
 
@@ -63,7 +63,7 @@ namespace RddStore.PL.Controllers
         [HttpDelete ("Delete")]
         public IActionResult DeleteCategory(int id)
         {
-           var deleted = _icategoryService.DeleteCategory(id);
+           var deleted = _icategoryService.Delete(id);
             return deleted > 0 ? Ok() : NotFound();
         }
 
