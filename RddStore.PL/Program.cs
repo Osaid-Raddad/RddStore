@@ -1,9 +1,12 @@
 
 using Microsoft.EntityFrameworkCore;
-using RddStore.BLL.Services;
+using RddStore.BLL.Services.Classes;
+using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.Data;
-using RddStore.DAL.Repositories;
-
+using RddStore.DAL.Repositories.Classes;
+using RddStore.DAL.Repositories.Interfaces;
+using Scalar;
+using Scalar.AspNetCore;
 namespace RddStore.PL
 {
     public class Program
@@ -23,13 +26,15 @@ namespace RddStore.PL
             });
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+            builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+            builder.Services.AddScoped<IBrandService, BrandService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();
