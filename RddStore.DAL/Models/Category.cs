@@ -8,6 +8,6 @@ namespace RddStore.DAL.Models
 {
     public class Category : BaseModel
     {
-        public String Name { get; set; }
+        public string Name { get; set; }
     }
 }
