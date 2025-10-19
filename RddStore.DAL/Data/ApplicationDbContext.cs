@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RddStore.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RddStore.DAL.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         
         public DbSet<Category> Categories { get; set; }
@@ -17,5 +19,19 @@ namespace RddStore.DAL.Data
         {
             
         }
+
+       protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>().ToTable("Users");
+            builder.Entity<IdentityRole>().ToTable("Roles");
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            //ignore
+            builder.Ignore<IdentityUserClaim<string>>();
+            builder.Ignore<IdentityUserLogin<string>>();
+            builder.Ignore<IdentityRoleClaim<string>>();
+            builder.Ignore<IdentityUserToken<string>>();
+        }
+
     }
 }
