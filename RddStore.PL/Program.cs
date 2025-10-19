@@ -5,6 +5,7 @@ using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.Data;
 using RddStore.DAL.Repositories.Classes;
 using RddStore.DAL.Repositories.Interfaces;
+using RddStore.DAL.Utilities;
 using Scalar;
 using Scalar.AspNetCore;
 namespace RddStore.PL
@@ -28,6 +29,7 @@ namespace RddStore.PL
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IBrandRepository, BrandRepository>();
             builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<ISeedData, SeedData>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,7 +38,9 @@ namespace RddStore.PL
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
+            var scope = app.Services.CreateScope();
+            var objectOfSeedData = scope.ServiceProvider.GetRequiredService<ISeedData>();
+            objectOfSeedData.SeedingData();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
