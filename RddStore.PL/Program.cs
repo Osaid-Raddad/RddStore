@@ -1,8 +1,10 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RddStore.BLL.Services.Classes;
 using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.Data;
+using RddStore.DAL.Models;
 using RddStore.DAL.Repositories.Classes;
 using RddStore.DAL.Repositories.Interfaces;
 using RddStore.DAL.Utilities;
@@ -12,7 +14,7 @@ namespace RddStore.PL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,7 @@ namespace RddStore.PL
             builder.Services.AddScoped<IBrandRepository, BrandRepository>();
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ISeedData, SeedData>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -40,7 +43,8 @@ namespace RddStore.PL
             }
             var scope = app.Services.CreateScope();
             var objectOfSeedData = scope.ServiceProvider.GetRequiredService<ISeedData>();
-            objectOfSeedData.SeedingData();
+            await objectOfSeedData.SeedingDataAsync();
+            await objectOfSeedData.IdentityDataSeedingAsync();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

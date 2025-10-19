@@ -8,6 +8,7 @@ namespace RddStore.DAL.Utilities
 {
     public interface ISeedData
     {
-        public void SeedingData();
+        Task SeedingDataAsync();
+        Task IdentityDataSeedingAsync();
     }
 }
