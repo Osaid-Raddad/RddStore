@@ -15,8 +15,6 @@ namespace RddStore.BLL.Services.Classes
     public class CategoryService : GenericService<CategoryRequest, CategoryResponse, Category>, ICategoryService
     {
 
-        private readonly ICategoryRepository _icategoryRepository;
-
         public CategoryService(ICategoryRepository icategoryRepository) : base(icategoryRepository)
         {
             

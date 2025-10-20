@@ -53,7 +53,7 @@ namespace RddStore.DAL.Utilities
         {
             if(! await _roleManager.Roles.AnyAsync())
             {
-              await  _roleManager.CreateAsync(new IdentityRole ("Admin"));
+                await  _roleManager.CreateAsync(new IdentityRole ("Admin"));
                 await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
                 await _roleManager.CreateAsync(new IdentityRole("Customer"));
             }
