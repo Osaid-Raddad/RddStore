@@ -14,6 +14,6 @@ namespace RddStore.DAL.Repositories.Interfaces
         T? GetById(int id);
 
         int Remove(T entity);
-        int Update(T entity);
+        int Update(T entity); 
     }
 }
