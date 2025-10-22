@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.DTO.Requests;
 using RddStore.DAL.DTO.Responses;
 using RddStore.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +18,12 @@ namespace RddStore.BLL.Services.Classes
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _confige;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration confige)
         {
-            _userManager = userManager; 
+            _userManager = userManager;
+            _confige = confige;
         }
 
         public async Task<UserResponse> LoginAsync(LoginRequest loginRequest)
@@ -34,7 +40,7 @@ namespace RddStore.BLL.Services.Classes
             }
             return new UserResponse()
             {
-                Email = user.Email
+                Token = await CreateTokenAsync(user)
             };
         }
 
@@ -51,7 +57,7 @@ namespace RddStore.BLL.Services.Classes
             {
                 return new UserResponse()
                 {
-                    Email = newUser.Email
+                    Token = newUser.Email
                 };
             }
             else
@@ -59,6 +65,31 @@ namespace RddStore.BLL.Services.Classes
                throw new Exception($"{result.Errors}");
             }
 
+        }
+
+        private async Task<string> CreateTokenAsync(ApplicationUser user)
+        {
+            var Claims = new List<Claim>()
+            {
+                new Claim("id",user.Id),
+                new Claim("username",user.UserName),
+                new Claim("Email",user.Email),
+            };
+            
+            var Roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in Roles)
+            {
+                Claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_confige.GetSection("JwtOption")["SecretKey"]));
+            var Credentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var Token = new JwtSecurityToken(
+                claims: Claims,
+                expires: DateTime.Now.AddDays(15),
+                signingCredentials: Credentials
+                );
+            return new JwtSecurityTokenHandler().WriteToken(Token);
         }
     }
 }
