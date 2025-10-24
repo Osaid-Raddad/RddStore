@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RddStore.BLL.Services.Interfaces;
@@ -19,12 +20,30 @@ namespace RddStore.BLL.Services.Classes
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _confige;
+        private readonly IEmailSender _emailSender;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration confige)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration confige, IEmailSender emailSender)
         {
             _userManager = userManager;
             _confige = confige;
+            _emailSender = emailSender;
         }
+
+        public async Task<string> ConfirmEmail(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("Invalid user ID.");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Email confirmation failed.");
+            }
+            return "Email confirmed successfully.";
+        }
+
 
         public async Task<UserResponse> LoginAsync(LoginRequest loginRequest)
         {
@@ -59,6 +78,15 @@ namespace RddStore.BLL.Services.Classes
             var result = await _userManager.CreateAsync(newUser, registerRequest.Password);
             if (result.Succeeded )
             {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                var escapeToken = Uri.EscapeDataString(token);
+                var emailUrl = $"https://localhost:7042/api/Identity/Account/ConfirmEmail?token={escapeToken}&userId={newUser.Id}";
+
+                await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email",
+                 $"<h1>Welcome to RddStore</h1>" +
+                 $"<p>Please confirm your email by clicking the link below:</p>" +
+                 $"<a href='{emailUrl}'>Confirm Email</a>");
+
                 return new UserResponse()
                 {
                     Token = newUser.Email

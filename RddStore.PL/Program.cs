@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RddStore.BLL.Services.Classes;
@@ -10,6 +11,7 @@ using RddStore.DAL.Models;
 using RddStore.DAL.Repositories.Classes;
 using RddStore.DAL.Repositories.Interfaces;
 using RddStore.DAL.Utilities;
+using RddStore.PL.Utilites;
 using Scalar;
 using Scalar.AspNetCore;
 using System.Text;
@@ -36,7 +38,8 @@ namespace RddStore.PL
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ISeedData, SeedData>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddScoped<IEmailSender, EmailSetting>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddAuthentication(options =>
             {

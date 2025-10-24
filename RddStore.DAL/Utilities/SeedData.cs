@@ -62,24 +62,27 @@ namespace RddStore.DAL.Utilities
             {
                 var user1 = new ApplicationUser
                 {
-                    Email = "osaid@gmail.com",
+                    Email = "osaidislam1@gmail.com",
                     FullName = "Osaid Islam",
                     PhoneNumber = "1234567890",
-                    UserName = "OSAID"
+                    UserName = "OSAID",
+                    EmailConfirmed = true
                 };
                 var user2 = new ApplicationUser
                 {
                     Email = "osmar@gmail.com",
                     FullName = "Omar Jamil",
                     PhoneNumber = "1234587890",
-                    UserName = "Omar12"
+                    UserName = "Omar12",
+                    EmailConfirmed = true
                 };
                 var user3 = new ApplicationUser
                 {
                     Email = "adam@gmail.com",
                     FullName = "Adam Jamal",
                     PhoneNumber = "1234567590",
-                    UserName = "Adam23"
+                    UserName = "Adam23",
+                    EmailConfirmed = true
                 };
                 await _userManager.CreateAsync(user1, "P@ssw0rd1");
                 await _userManager.CreateAsync(user2, "P@ssw0rd2");
