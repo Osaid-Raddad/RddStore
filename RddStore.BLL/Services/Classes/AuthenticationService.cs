@@ -33,6 +33,10 @@ namespace RddStore.BLL.Services.Classes
             {
                 throw new Exception("Invalid email or password.");
             }
+            if (await _userManager.IsEmailConfirmedAsync(user))
+            {
+                throw new Exception("Email is not confirmed.");
+            }
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
             if (!isPasswordValid)
             {

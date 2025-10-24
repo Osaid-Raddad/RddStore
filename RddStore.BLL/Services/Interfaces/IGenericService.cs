@@ -12,8 +12,8 @@ namespace RddStore.BLL.Services.Interfaces
     public interface IGenericService <TRequest, TResponse,TEntity> where TEntity : BaseModel
     {
         int Create(TRequest request);
-        IEnumerable<TResponse> GetAll();
-        TResponse? GetById(int id);
+        IEnumerable<TResponse> GetAll(bool onlyActive = false);
+        TResponse? GetById(int id, bool isAdmin=false);
         int Update(int id, TRequest request);
         int Delete(int id);
         public bool ToogleStatus(int id);
