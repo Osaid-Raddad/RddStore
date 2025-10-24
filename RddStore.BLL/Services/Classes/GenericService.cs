@@ -40,16 +40,28 @@ namespace RddStore.BLL.Services.Classes
             return _igenericRepository.Remove(entity);
         }
 
-        public IEnumerable<TResponse> GetAll()
+        public IEnumerable<TResponse> GetAll(bool onlyActive = false)
         {
             var entity = _igenericRepository.GetAll();
+            if (onlyActive)
+            {
+               entity = entity.Where(e => e.Status == Status.Active);
+            }
             return entity.Adapt<IEnumerable<TResponse>>();
         }
 
-        public TResponse? GetById(int id)
+        public TResponse? GetById(int id, bool isAdmin = false)
         {
             var entity = _igenericRepository.GetById(id);
-            return entity == null ? default: entity.Adapt<TResponse>();
+            if (entity == null)
+             {
+                return default;
+            }
+            if (isAdmin && entity.Status == Status.Inactive)
+            {
+               throw new Exception("Brand is not active");
+            }
+            return  entity.Adapt<TResponse>();
         }
 
         public bool ToogleStatus(int id)
