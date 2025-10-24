@@ -37,5 +37,18 @@ namespace RddStore.PL.Areas.Identity.Controllers
             return Ok(result);
         }
 
+        [HttpPost("Forgot-Password")]
+        public async Task<ActionResult<string>> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var result = await _authenticationService.ForgotPassword(request);
+            return Ok(result);
+        }
+
+        [HttpPatch("Reset-Password")]
+        public async Task<ActionResult<string>> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var result = await _authenticationService.ResetPassword(request);
+            return Ok(result);
+        }
     }
 }

@@ -29,6 +29,46 @@ namespace RddStore.BLL.Services.Classes
             _emailSender = emailSender;
         }
 
+        public async Task<bool> ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                throw new Exception("User Not Found");
+            }
+            if (user.CodeResetPassword != request.Code) return false;
+            if(user.CodeResetPasswordExpiration < DateTime.UtcNow) return false;
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+            if(result.Succeeded)
+            {
+                await _emailSender.SendEmailAsync(request.Email, "Change Password", "<h1>Password Reset Successful<h1>");
+            }
+            return true;
+        }
+
+        public async Task<bool> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                throw new Exception("User Not Found");
+            }
+
+            var random = new Random();
+            var code = random.Next(1000, 9999).ToString();
+
+            user.CodeResetPassword = code;
+            user.CodeResetPasswordExpiration = DateTime.UtcNow.AddMinutes(15);
+            await _userManager.UpdateAsync(user);
+            await _emailSender.SendEmailAsync(request.Email, "Password Reset Code",
+                $"<h1>Password Reset Code</h1>" +
+                $"<p>Your password reset code is: <strong>{code}</strong></p>" +
+                $"<p>This code will expire in 15 minutes.</p>");
+
+            return true;
+        }
+
         public async Task<string> ConfirmEmail(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);
