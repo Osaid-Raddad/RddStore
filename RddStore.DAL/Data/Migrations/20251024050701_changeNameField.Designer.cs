@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RddStore.DAL.Data;
 
@@ -11,9 +12,11 @@ using RddStore.DAL.Data;
 namespace RddStore.DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024050701_changeNameField")]
+    partial class changeNameField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +78,8 @@ namespace RddStore.DAL.Data.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CodeResetPassword")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CodeResetPassword")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CodeResetPasswordExpiration")
                         .HasColumnType("datetime2");

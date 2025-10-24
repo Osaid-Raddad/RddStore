@@ -39,7 +39,17 @@ namespace RddStore.PL
             builder.Services.AddScoped<ISeedData, SeedData>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSetting>();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.Password.RequireDigit = true;
+                option.Password.RequireLowercase = true;
+                option.Password.RequireUppercase = true;
+                option.Password.RequireNonAlphanumeric = true;
+                option.Password.RequiredLength = 10;
+                option.User.RequireUniqueEmail = true;
+                option.SignIn.RequireConfirmedEmail = true; 
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             builder.Services.AddAuthentication(options =>
             {

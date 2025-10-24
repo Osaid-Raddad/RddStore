@@ -13,5 +13,7 @@ namespace RddStore.BLL.Services.Interfaces
         Task<UserResponse> RegisterAsync(RegisterRequest registerRequest);
         Task<UserResponse> LoginAsync(LoginRequest loginRequest);
         Task<string> ConfirmEmail(string userId, string token);
+        Task<bool> ForgotPassword(ForgotPasswordRequest request);
+        Task<bool> ResetPassword(ResetPasswordRequest request);
     }
 }
