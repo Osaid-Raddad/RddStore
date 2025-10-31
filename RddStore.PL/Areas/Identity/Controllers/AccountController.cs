@@ -20,7 +20,7 @@ namespace RddStore.PL.Areas.Identity.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserResponse>> Register([FromBody] RegisterRequest registerRequest)
         {
-            var result = await _authenticationService.RegisterAsync(registerRequest);
+            var result = await _authenticationService.RegisterAsync(registerRequest,Request);
             return Ok(result);
         }
 

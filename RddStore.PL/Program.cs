@@ -14,6 +14,7 @@ using RddStore.DAL.Utilities;
 using RddStore.PL.Utilites;
 using Scalar;
 using Scalar.AspNetCore;
+using Stripe;
 using System.Text;
 namespace RddStore.PL
 {
@@ -36,6 +37,13 @@ namespace RddStore.PL
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IBrandRepository, BrandRepository>();
             builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<ICheckOutRepository, CheckOutRepository>();
+            builder.Services.AddScoped<ICheckOutService, CheckOutService>();
+            builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();
             builder.Services.AddScoped<ISeedData, SeedData>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSetting>();
@@ -45,8 +53,8 @@ namespace RddStore.PL
                 option.Password.RequireLowercase = true;
                 option.Password.RequireUppercase = true;
                 option.Password.RequireNonAlphanumeric = true;
-                option.Password.RequiredLength = 10;
-                option.User.RequireUniqueEmail = true;
+                option.Password.RequiredLength = 9;
+               // option.User.RequireUniqueEmail = true;
                 option.SignIn.RequireConfirmedEmail = true; 
             })
             .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
@@ -67,7 +75,8 @@ namespace RddStore.PL
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtOption")["SecretKey"]))
                 };
             });
-
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -84,6 +93,7 @@ namespace RddStore.PL
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
 

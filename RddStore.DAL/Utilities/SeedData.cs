@@ -86,7 +86,7 @@ namespace RddStore.DAL.Utilities
                 };
                 await _userManager.CreateAsync(user1, "P@ssw0rd1");
                 await _userManager.CreateAsync(user2, "P@ssw0rd2");
-                await _userManager.CreateAsync(user3, "P@ssw0");
+                await _userManager.CreateAsync(user3, "P@ssw0234");
 
                 await _userManager.AddToRoleAsync(user1, "Admin");
                 await _userManager.AddToRoleAsync(user2, "SuperAdmin");

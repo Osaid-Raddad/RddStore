@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RddStore.DAL.Data;
 
@@ -11,9 +12,11 @@ using RddStore.DAL.Data;
 namespace RddStore.DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024120057_addProductModel")]
+    partial class addProductModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,39 +171,6 @@ namespace RddStore.DAL.Data.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("RddStore.DAL.Models.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("RddStore.DAL.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -292,40 +262,17 @@ namespace RddStore.DAL.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RddStore.DAL.Models.Cart", b =>
-                {
-                    b.HasOne("RddStore.DAL.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RddStore.DAL.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RddStore.DAL.Models.Product", b =>
                 {
-                    b.HasOne("RddStore.DAL.Models.Brand", "Brand")
+                    b.HasOne("RddStore.DAL.Models.Brand", null)
                         .WithMany("Products")
                         .HasForeignKey("BrandId");
 
-                    b.HasOne("RddStore.DAL.Models.Category", "Category")
+                    b.HasOne("RddStore.DAL.Models.Category", null)
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("RddStore.DAL.Models.Brand", b =>

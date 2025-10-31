@@ -20,4 +20,12 @@
     <ProjectReference Include="..\RddStore.BLL\RddStore.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\83114ef4-07f9-4f54-b18e-c7d7ca745d08.jpg" />
+  </ItemGroup>
+
 </Project>

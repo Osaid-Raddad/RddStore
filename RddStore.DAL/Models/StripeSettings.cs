@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace RddStore.DAL.Models
 {
-    public class Brand : BaseModel
+    public class StripeSettings
     {
-        public string Name { get; set; }
-        public List<Product> Products { get; set; }
+        public string? SecretKey { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -92,7 +93,7 @@ namespace RddStore.BLL.Services.Classes
             {
                 throw new Exception("Invalid email or password.");
             }
-            if (await _userManager.IsEmailConfirmedAsync(user))
+            if (!await _userManager.IsEmailConfirmedAsync(user))
             {
                 throw new Exception("Email is not confirmed.");
             }
@@ -107,20 +108,21 @@ namespace RddStore.BLL.Services.Classes
             };
         }
 
-        public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest, HttpRequest httpRequest)
         {
             var newUser = new ApplicationUser()
             {
                 FullName = registerRequest.FullName,
                 UserName = registerRequest.UserName,
-                Email = registerRequest.Email
+                Email = registerRequest.Email,
+                PhoneNumber = registerRequest.PhoneNumber,
             };
             var result = await _userManager.CreateAsync(newUser, registerRequest.Password);
             if (result.Succeeded )
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                 var escapeToken = Uri.EscapeDataString(token);
-                var emailUrl = $"https://localhost:7042/api/Identity/Account/ConfirmEmail?token={escapeToken}&userId={newUser.Id}";
+                var emailUrl = $"{httpRequest.Scheme}/api/Identity/Account/ConfirmEmail?token={escapeToken}&userId={newUser.Id}";
 
                 await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email",
                  $"<h1>Welcome to RddStore</h1>" +
@@ -143,9 +145,9 @@ namespace RddStore.BLL.Services.Classes
         {
             var Claims = new List<Claim>()
             {
-                new Claim("id",user.Id),
-                new Claim("username",user.UserName),
-                new Claim("Email",user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(ClaimTypes.Email,user.Email),
             };
             
             var Roles = await _userManager.GetRolesAsync(user);
