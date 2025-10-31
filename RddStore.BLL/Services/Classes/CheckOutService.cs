@@ -37,7 +37,15 @@ namespace RddStore.BLL.Services.Classes
                     message = "Cart is empty."
                 };
             }
-            if(request.PaymentMethod == "Cash") { }
+            if(request.PaymentMethod == "Cash") {
+
+                return new CheckOutResponse
+                {
+                    Success = true,
+                    message = "Order placed successfully with Cash on Delivery."
+
+                }; 
+             }
             if(request.PaymentMethod == "Visa")
             {
                 var options = new SessionCreateOptions
@@ -71,7 +79,6 @@ namespace RddStore.BLL.Services.Classes
                           }); 
                 }
 
-
                 var service = new SessionService();
                 var session = service.Create(options);
                 return new CheckOutResponse
@@ -82,8 +89,12 @@ namespace RddStore.BLL.Services.Classes
                    // PaymentId = session.Id
                 };
             }
+            return new CheckOutResponse
+            {
+                Success = true,
+                message = "test"
 
-
+            };
         }
     }
 }
