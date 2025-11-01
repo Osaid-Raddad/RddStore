@@ -14,12 +14,12 @@ namespace RddStore.BLL.Services.Classes
 {
     public class ProductService : GenericService<ProductRequest, ProductResponse, Product>, IProductService
     {
-        private readonly IProductRepository _repository;
+        private readonly IProductRepository _producRepository;
         private readonly IFileService _fileService;
 
         public ProductService(IProductRepository iproductRepository,IFileService fileService) : base(iproductRepository)
         {
-            _repository = iproductRepository;
+            _producRepository = iproductRepository;
             _fileService = fileService;
         }
 
@@ -33,7 +33,7 @@ namespace RddStore.BLL.Services.Classes
               var imagePath = await _fileService.UploadAsync(request.MainImage);
               entity.MainImage = imagePath;
             }
-            return _repository.Add(entity);
+            return _producRepository.Add(entity);
         }
 
 

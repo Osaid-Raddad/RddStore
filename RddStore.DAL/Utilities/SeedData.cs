@@ -41,9 +41,9 @@ namespace RddStore.DAL.Utilities
             if(!await _context.Brands.AnyAsync())
             {
                 await _context.Brands.AddRangeAsync(
-                    new Models.Brand { Name = "Apple" },
-                    new Models.Brand { Name = "Samsung" },
-                    new Models.Brand { Name = "Nike" }
+                    new Models.Brand { Name = "Adidas" , Image ="Adidas.png"},
+                    new Models.Brand { Name = "Nike", Image = "Nike.png" },
+                    new Models.Brand { Name = "Poma",Image = "Poma.png" }
                 );
             }
               await  _context.SaveChangesAsync();

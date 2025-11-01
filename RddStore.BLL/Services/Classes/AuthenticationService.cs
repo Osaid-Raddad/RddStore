@@ -22,12 +22,14 @@ namespace RddStore.BLL.Services.Classes
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _confige;
         private readonly IEmailSender _emailSender;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration confige, IEmailSender emailSender)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration confige, IEmailSender emailSender,SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _confige = confige;
             _emailSender = emailSender;
+            _signInManager = signInManager;
         }
 
         public async Task<bool> ResetPassword(ResetPasswordRequest request)
@@ -93,19 +95,28 @@ namespace RddStore.BLL.Services.Classes
             {
                 throw new Exception("Invalid email or password.");
             }
-            if (!await _userManager.IsEmailConfirmedAsync(user))
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, true);
+            if (result.Succeeded)
             {
-                throw new Exception("Email is not confirmed.");
+                return new UserResponse()
+                {
+                    Token = await CreateTokenAsync(user)
+                };
             }
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
-            if (!isPasswordValid)
+            else if (result.IsLockedOut)
+            {
+                throw new Exception("User account is locked out.");
+            }
+            else if (result.IsNotAllowed)
+            {
+                throw new Exception("Please Confirm Your Email");
+            }
+            else
             {
                 throw new Exception("Invalid email or password.");
             }
-            return new UserResponse()
-            {
-                Token = await CreateTokenAsync(user)
-            };
+
+
         }
 
         public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest, HttpRequest httpRequest)
@@ -123,6 +134,8 @@ namespace RddStore.BLL.Services.Classes
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                 var escapeToken = Uri.EscapeDataString(token);
                 var emailUrl = $"{httpRequest.Scheme}/api/Identity/Account/ConfirmEmail?token={escapeToken}&userId={newUser.Id}";
+
+                var roleResult = await _userManager.AddToRoleAsync(newUser, "Customer");
 
                 await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email",
                  $"<h1>Welcome to RddStore</h1>" +

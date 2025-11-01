@@ -54,8 +54,10 @@ namespace RddStore.PL
                 option.Password.RequireUppercase = true;
                 option.Password.RequireNonAlphanumeric = true;
                 option.Password.RequiredLength = 9;
-               // option.User.RequireUniqueEmail = true;
+                option.User.RequireUniqueEmail = true;
                 option.SignIn.RequireConfirmedEmail = true; 
+                option.Lockout.MaxFailedAccessAttempts = 5;
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             })
             .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 

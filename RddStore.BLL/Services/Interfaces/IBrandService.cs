@@ -11,5 +11,6 @@ namespace RddStore.BLL.Services.Interfaces
 {
     public interface IBrandService : IGenericService<BrandRequest,BrandResponse,Brand>
     {
+        Task<int> CreateFileAsync(BrandRequest request);
     }
 }
