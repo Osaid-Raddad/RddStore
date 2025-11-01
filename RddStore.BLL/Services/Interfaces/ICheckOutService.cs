@@ -12,5 +12,6 @@ namespace RddStore.BLL.Services.Interfaces
     public interface ICheckOutService
     {
         Task <CheckOutResponse> ProcessPaymentAsync(CheckOutRequest request, string UserId, HttpRequest httpRequest);
+        Task<bool> HandlePaymentSuccessAsync(int orderId);
     }
 }

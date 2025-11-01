@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.DTO.Requests;
 using RddStore.DAL.DTO.Responses;
+using RddStore.DAL.Models;
 using RddStore.DAL.Repositories.Interfaces;
 using Stripe.Checkout;
 using System;
@@ -24,6 +25,10 @@ namespace RddStore.BLL.Services.Classes
             _cartRepository = cartRepository;
         }
 
+        public Task<bool> HandlePaymentSuccessAsync(int orderId)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<CheckOutResponse> ProcessPaymentAsync(CheckOutRequest request, string UserId,HttpRequest httpRequest)
         {
@@ -37,7 +42,15 @@ namespace RddStore.BLL.Services.Classes
                     message = "Cart is empty."
                 };
             }
-            if(request.PaymentMethod == "Cash") {
+
+            Order order = new Order
+            {
+                UserId = UserId,
+                PaymentMethod = PaymentMethodEnum.Cash,
+                TotalAmount = cartItems.Sum(item => item.Product.Price * item.Count)
+            };
+
+            if (request.PaymentMethod == PaymentMethodEnum.Cash) {
 
                 return new CheckOutResponse
                 {
@@ -46,7 +59,7 @@ namespace RddStore.BLL.Services.Classes
 
                 }; 
              }
-            if(request.PaymentMethod == "Visa")
+            if(request.PaymentMethod == PaymentMethodEnum.Visa)
             {
                 var options = new SessionCreateOptions
                 {
@@ -56,7 +69,7 @@ namespace RddStore.BLL.Services.Classes
                
                      },
                     Mode = "payment",
-                    SuccessUrl = $"{httpRequest.Scheme}://{httpRequest.Host}/checkout/success",
+                    SuccessUrl = $"{httpRequest.Scheme}://{httpRequest.Host}/api/Customer/CheckOut/Success/{order.Id}",
                     CancelUrl = $"{httpRequest.Scheme}://{httpRequest.Host}/checkout/cancel",
                 };
 
@@ -81,6 +94,7 @@ namespace RddStore.BLL.Services.Classes
 
                 var service = new SessionService();
                 var session = service.Create(options);
+                order.PaymentId = session.Id;
                 return new CheckOutResponse
                 {
                     Success = true,
