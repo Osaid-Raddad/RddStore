@@ -1,4 +1,4 @@
-/**
+
 
 # 🛍️ E-Commerce API
 
@@ -167,4 +167,4 @@ Integrated with **Stripe API** for secure and smooth payment processing.
    ```
 
 ---
-*/
+
