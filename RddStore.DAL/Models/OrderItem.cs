@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace RddStore.DAL.Models
 {
     [PrimaryKey(nameof(OrderId),nameof(ProductId))]
-    public class OrderItems
+    public class OrderItem
     {
         public int OrderId { get; set; }
         public Order Order { get; set; }
@@ -16,5 +16,7 @@ namespace RddStore.DAL.Models
         public Product Product { get; set; }
       
         public decimal totalPrice { get; set; }
+        public int Count { get; set; }
+        public decimal Price { get; set; }
     }
 }

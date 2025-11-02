@@ -20,7 +20,7 @@ namespace RddStore.BLL.Services.Classes
             _cartRepository = cartRepository;
         }
 
-        public bool AddToCart(CartRequest cartRequest, string UserId)
+        public async Task<bool> AddToCartAsync(CartRequest cartRequest, string UserId)
         {
             var newItem = new Cart
             {
@@ -28,12 +28,12 @@ namespace RddStore.BLL.Services.Classes
                 UserId = UserId,
                 Count = 1
             };          
-            return _cartRepository.Add(newItem) > 0;
+            return await _cartRepository.AddAsync(newItem) > 0;
         }
 
-        public CartSummaryResponse GetSummaryResponse(string UserId)
+        public async Task<CartSummaryResponse> GetSummaryResponseAsync(string UserId)
         {
-            var cartItem = _cartRepository.GetUserCart(UserId);
+            var cartItem =await _cartRepository.GetUserCartAsync(UserId);
             var cartSummary = new CartSummaryResponse
             {
                 Items = cartItem.Select(item => new CartResponse

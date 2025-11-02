@@ -20,15 +20,15 @@ namespace RddStore.DAL.Repositories.Classes
         }
 
 
-        public int Add(Cart cart)
+        public async Task<int> AddAsync(Cart cart)
         {
-            _context.Carts.Add(cart);
-            return _context.SaveChanges();
+            await _context.Carts.AddAsync(cart);
+            return await _context.SaveChangesAsync();
         }
 
-        public List<Cart> GetUserCart(string UserId)
+        public async Task<List<Cart>> GetUserCartAsync(string UserId)
         {
-            return _context.Carts.Include(c => c.Product).Where(c => c.UserId == UserId).ToList();
+            return await _context.Carts.Include(c => c.Product).Where(c => c.UserId == UserId).ToListAsync();
         }
     }
 }

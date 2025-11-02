@@ -20,10 +20,10 @@ namespace RddStore.PL.Areas.Customer.Controllers
         }
 
         [HttpPost("AddToCart")]
-        public IActionResult AddToCart( CartRequest cartRequest)
+        public async Task<IActionResult> AddToCartAsync( CartRequest cartRequest)
         {
            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _cartService.AddToCart(cartRequest, userId);
+           var result = await _cartService.AddToCartAsync(cartRequest, userId);
            if (result)
            {
              return Ok(new { Message = "Product added to cart successfully." });
@@ -35,10 +35,10 @@ namespace RddStore.PL.Areas.Customer.Controllers
         }
 
         [HttpGet("GetUserCart")]
-        public IActionResult GetUserCart()
+        public async Task<IActionResult> GetUserCartAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var cartSummary = _cartService.GetSummaryResponse(userId);
+            var cartSummary = await _cartService.GetSummaryResponseAsync(userId);
             return Ok(cartSummary);
         }
     }

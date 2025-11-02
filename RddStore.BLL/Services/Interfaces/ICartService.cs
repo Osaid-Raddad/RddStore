@@ -10,8 +10,8 @@ namespace RddStore.BLL.Services.Interfaces
 {
     public interface ICartService
     {
-        bool AddToCart(CartRequest cartRequest, string UserId);
+        Task<bool> AddToCartAsync(CartRequest cartRequest, string UserId);
 
-        CartSummaryResponse GetSummaryResponse(string UserId);
+        Task<CartSummaryResponse> GetSummaryResponseAsync(string UserId);
     }
 }

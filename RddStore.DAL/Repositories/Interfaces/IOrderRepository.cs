@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace RddStore.DAL.Repositories.Interfaces
 {
-    public interface ICartRepository 
+    public interface IOrderRepository
     {
-        Task<int> AddAsync(Cart cart);
-        
-        Task <List<Cart>> GetUserCartAsync(string UserId);
-
+        Task<Order?> GetOrderByUserAsync(int OrderId);
+        Task<Order?> AddOrderAsync(Order order);
     }
 }

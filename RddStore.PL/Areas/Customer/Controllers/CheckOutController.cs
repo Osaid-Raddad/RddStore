@@ -30,11 +30,12 @@ namespace RddStore.PL.Areas.Customer.Controllers
         }
 
 
-        [HttpGet("Success")]
+        [HttpGet("Success/{orderid}")]
         [AllowAnonymous]
-        public IActionResult Success()
+        public async Task<IActionResult> Success([FromRoute] int OrderId)
         {
-           return Ok("Payment Succeeded");
+           var result = await _checkOutService.HandlePaymentSuccessAsync(OrderId);
+            return Ok(result);
         }
     }
 }
