@@ -23,15 +23,17 @@ namespace RddStore.BLL.Services.Classes
         private readonly IOrderRepository _orderRepository;
         private readonly IEmailSender _emailSender;
         private readonly IOrderItemRepositroy _orderItemRepositroy;
+        private readonly IProductRepository _productRepository;
 
         public CheckOutService(ICheckOutRepository checkOutRepository,ICartRepository cartRepository,IOrderRepository orderRepository,IEmailSender emailSender
-            ,IOrderItemRepositroy orderItemRepositroy)
+            ,IOrderItemRepositroy orderItemRepositroy,IProductRepository productRepository)
         {
             _checkOutRepository = checkOutRepository;
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _emailSender = emailSender;
             _orderItemRepositroy = orderItemRepositroy;
+            _productRepository = productRepository;
         }
 
         public async Task<bool> HandlePaymentSuccessAsync(int orderId)
@@ -44,6 +46,7 @@ namespace RddStore.BLL.Services.Classes
                 order.Status = OrderStatusEnum.Approved;
                 var carts = await _cartRepository.GetUserCartAsync(order.UserId);
                 var orderItems = new List<OrderItem>();
+                var productUpdate = new List<(int productId, int quantity)>();
                 foreach (var cartItem in carts) 
                 {
                     var orderItem = new OrderItem
@@ -55,9 +58,11 @@ namespace RddStore.BLL.Services.Classes
                         Count = cartItem.Count
                     };
                     orderItems.Add(orderItem);
+                    productUpdate.Add((cartItem.ProductId, cartItem.Count));
                 }
                 await _orderItemRepositroy.AddOrderItemAsync(orderItems);
                 await _cartRepository.ClearCartAsync(order.UserId);
+                await _productRepository.DecreaseQuantityAsync(productUpdate);
                 subject = "Payment Successful --- RDDShop";
                 body = "<h1>Your payment has been processed successfully. Thank you for shopping with us!<h1>"+
                        $"<p>Your Payment For Order {orderId}<p>"+
