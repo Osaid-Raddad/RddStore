@@ -6,6 +6,7 @@ using RddStore.DAL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,11 @@ namespace RddStore.BLL.Services.Classes
                 Count = 1
             };          
             return await _cartRepository.AddAsync(newItem) > 0;
+        }
+
+        public async Task<bool> ClearCartAsync(string UserId)
+        {
+           return await _cartRepository.ClearCartAsync(UserId);
         }
 
         public async Task<CartSummaryResponse> GetSummaryResponseAsync(string UserId)

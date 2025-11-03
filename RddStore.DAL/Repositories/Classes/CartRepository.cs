@@ -26,6 +26,14 @@ namespace RddStore.DAL.Repositories.Classes
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> ClearCartAsync(string UserId)
+        {
+            var items = await _context.Carts.Where(c => c.UserId == UserId).ToListAsync();
+            _context.Carts.RemoveRange(items);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<Cart>> GetUserCartAsync(string UserId)
         {
             return await _context.Carts.Include(c => c.Product).Where(c => c.UserId == UserId).ToListAsync();

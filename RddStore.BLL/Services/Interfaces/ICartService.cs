@@ -13,5 +13,7 @@ namespace RddStore.BLL.Services.Interfaces
         Task<bool> AddToCartAsync(CartRequest cartRequest, string UserId);
 
         Task<CartSummaryResponse> GetSummaryResponseAsync(string UserId);
+
+        Task<bool> ClearCartAsync(string UserId);
     }
 }

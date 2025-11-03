@@ -57,7 +57,7 @@ namespace RddStore.BLL.Services.Classes
                     orderItems.Add(orderItem);
                 }
                 await _orderItemRepositroy.AddOrderItemAsync(orderItems);
-
+                await _cartRepository.ClearCartAsync(order.UserId);
                 subject = "Payment Successful --- RDDShop";
                 body = "<h1>Your payment has been processed successfully. Thank you for shopping with us!<h1>"+
                        $"<p>Your Payment For Order {orderId}<p>"+
