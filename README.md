@@ -125,7 +125,7 @@ Integrated with **Stripe API** for secure and smooth payment processing.
 * **SQL Server**
 * **Stripe API**
 * **JWT Authentication**
-* **AutoMapper**
+* **Mapster**
 * **Dependency Injection (DI)**
 
 ---
