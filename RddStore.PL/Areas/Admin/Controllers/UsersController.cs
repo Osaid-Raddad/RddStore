@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RddStore.BLL.Services.Interfaces;
+using RddStore.DAL.DTO.Requests;
 
 namespace RddStore.PL.Areas.Admin.Controllers
 {
@@ -66,6 +67,13 @@ namespace RddStore.PL.Areas.Admin.Controllers
                 return Ok(new { message = "No Blocked" });
             }
             return Ok(new { message = "Block" });
+        }
+
+        [HttpPatch("changeRole/{id}")]
+        public async Task<IActionResult> ChangeUserRole([FromRoute] string id, [FromBody] ChangeRoleRequest request)
+        {
+            var result = await _userservice.ChangeUserRoleAsync(id, request.RoleName);
+            return Ok(new {message = "Role Changed Successfylly" });
         }
 
     }

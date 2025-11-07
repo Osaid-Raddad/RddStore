@@ -67,5 +67,21 @@ namespace RddStore.DAL.Repositories.Classes
 
         }
 
+        public async Task<bool> ChangeUserRoleAsync(string userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            
+            var addResult = await _userManager.AddToRoleAsync(user, newRole);
+
+            return addResult.Succeeded;
+        }
+
     }
 }

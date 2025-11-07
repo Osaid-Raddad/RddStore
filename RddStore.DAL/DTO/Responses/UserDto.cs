@@ -17,5 +17,7 @@ namespace RddStore.DAL.DTO.Responses
 
         public bool EmailConfirmed { get; set; }
 
+        public string UserRole { get; set; }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using RddStore.BLL.Services.Interfaces;
 using RddStore.DAL.DTO.Responses;
 using RddStore.DAL.Models;
@@ -14,15 +16,34 @@ namespace RddStore.BLL.Services.Classes
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserService(IUserRepository userRepository) 
+        public UserService(IUserRepository userRepository, UserManager<ApplicationUser> userManager) 
         {
             _userRepository = userRepository;
+            _userManager = userManager;
         }
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
            var users = await _userRepository.GetAllUsersAsync();
-           return users.Adapt<List<UserDto>>();
+            var userDto = new List<UserDto>();
+            foreach (var user in users)
+            {
+                var userRole = await _userManager.GetRolesAsync(user);
+                userDto.Add(new UserDto
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    EmailConfirmed = user.EmailConfirmed,
+                    UserRole = userRole.FirstOrDefault()
+                });
+
+            }
+            
+            return userDto;
         }
 
         public async Task<UserDto> GetUserByIdAsync(string id)
@@ -44,6 +65,11 @@ namespace RddStore.BLL.Services.Classes
         public async Task<bool> UnblockUserAsync(string id) 
         {
             return await _userRepository.UnblockUserAsync(id);
+        }
+
+        public async Task<bool> ChangeUserRoleAsync(string userId, string newRole)
+        {
+            return await _userRepository.ChangeUserRoleAsync(userId, newRole);
         }
 
     }

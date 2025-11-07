@@ -16,5 +16,7 @@ namespace RddStore.DAL.Repositories.Interfaces
          Task<bool> UnblockUserAsync(string id);
         Task<bool> IsBlockedAsync(string id);
 
+        Task<bool> ChangeUserRoleAsync(string userId, string newRole);
+
     }
 }
