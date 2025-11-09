@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RddStore.DAL.Repositories.Interfaces
+namespace RddStore.BLL.Services.Interfaces
 {
-    public interface IOrderRepository
+    public interface IOrderService
     {
-        Task<Order?> GetOrderByUserAsync(int OrderId);
         Task<Order?> AddOrderAsync(Order order);
-        Task<List<Order>> GetOrdersByStatusAsync(OrderStatusEnum status);
-        Task<List<Order>> GetUserOrdersAsync(string id);
         Task<bool> ChangeOrderStatusAsync(int orderId, OrderStatusEnum newStatus);
+        Task<List<Order>> GetUserOrdersAsync(string id);
+        Task<List<Order>> GetOrdersByStatusAsync(OrderStatusEnum status);
+        Task<Order?> GetOrderByUserAsync(int OrderId);
     }
 }

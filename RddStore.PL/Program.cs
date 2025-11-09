@@ -44,6 +44,7 @@ namespace RddStore.PL
             builder.Services.AddScoped<ICheckOutRepository, CheckOutRepository>();
             builder.Services.AddScoped<ICheckOutService, CheckOutService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderItemRepositroy,OrderItemRepositroy>();
             builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();
             builder.Services.AddScoped<ISeedData, SeedData>();
