@@ -23,5 +23,8 @@ namespace RddStore.DAL.Models
         public Category Category { get; set; }
         public int? BrandId { get; set; }
         public Brand? Brand { get; set; }
+
+        public List<ProductImage> SubImages { get; set; } = new List<ProductImage>();
+
     }
 }

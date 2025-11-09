@@ -19,6 +19,8 @@ namespace RddStore.DAL.DTO.Requests
         public double Rate { get; set; }
         public IFormFile MainImage { get; set; }
 
+        public List<IFormFile> SubImages { get; set; }
+
         public int CategoryId { get; set; }
 
         public int? BrandId { get; set; }

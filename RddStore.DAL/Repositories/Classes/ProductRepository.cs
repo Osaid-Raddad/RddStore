@@ -21,6 +21,11 @@ namespace RddStore.DAL.Repositories.Classes
             _context = context;
         }
 
+        public async Task<List<Product>> GetAllProductsWithImageAsync()
+        {
+            return await _context.Products.Include(p => p.SubImages).ToListAsync();
+        }
+
         public async Task DecreaseQuantityAsync(List<(int productId, int quantity)> Items)
         {
       

@@ -9,6 +9,7 @@ namespace RddStore.DAL.DTO.Responses
 {
     public class ProductResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -17,7 +18,10 @@ namespace RddStore.DAL.DTO.Responses
         [JsonIgnore]
         public string MainImage { get; set; }
 
-        public string MainImageUrl => $"https://localhost:7042/images/{MainImage}";
+        public string MainImageUrl { get; set; }
+
+        public List<string> SubImagesUrls { get; set; } = new List<string>();
+
 
     }
 }

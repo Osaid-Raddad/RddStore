@@ -1,4 +1,5 @@
-﻿using RddStore.DAL.DTO.Requests;
+﻿using Microsoft.AspNetCore.Http;
+using RddStore.DAL.DTO.Requests;
 using RddStore.DAL.DTO.Responses;
 using RddStore.DAL.Models;
 using System;
@@ -11,6 +12,7 @@ namespace RddStore.BLL.Services.Interfaces
 {
     public interface IProductService : IGenericService<ProductRequest, ProductResponse, Product> 
     {
-        Task<int> CreateFileAsync(ProductRequest request);
+        Task<int> CreateProductAsync(ProductRequest request);
+        Task<List<ProductResponse>> GetAllProductsAsync(HttpRequest request, bool onlyActive = false);
     }
 }

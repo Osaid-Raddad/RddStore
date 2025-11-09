@@ -23,11 +23,16 @@ namespace RddStore.PL.Areas.Admin.Controllers
         [HttpPost("")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductRequest productCreate)
         {
-            var result = await _productService.CreateFileAsync(productCreate);
+            var result = await _productService.CreateProductAsync(productCreate);
             return Ok(result);
         }
 
         [HttpGet("GetAllProducts")]
-        public IActionResult GetAllProducts() => Ok(_productService.GetAll());
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var result = await _productService.GetAllProductsAsync(Request);
+            return Ok(result);
+        }
+
     }
 }
